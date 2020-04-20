@@ -1,0 +1,109 @@
+db.activities.find({
+	$and: [
+		{name_activity: {$all: [re.compile(value1),re.compile(value2)]}},
+		{type_activity: {$all: [re.compile(value1),re.compile(value2)]}},
+		...,
+		{
+			$or:
+			[
+				{
+					$and: 
+					[
+						{time: {$all: [re.compile(value1),re.compile(value2)]}},
+						{work: {$all: [re.compile(value1),re.compile(value2)]}},
+						{name_place: {$all: [re.compile(value1),re.compile(value2)]}}
+					]
+				},
+				{
+					map: { $all: [
+                                    { "$elemMatch" : { work:{$all :[re.complie(),re.compile()]},time:{$all :[re.complie(),re.compile()]},name_place:{$all :[re.complie(),re.compile()]} } }                                  ] }
+				}
+
+			]
+		}
+	]
+})
+
+query mới
+db.activities.find({
+	$and: [
+		{name_activity: {$all: [re.compile(value1),re.compile(value2)]}},
+		{type_activity: {$all: [re.compile(value1),re.compile(value2)]}},
+		...,
+		{
+			$and: [
+					{
+						$or:
+							[
+								{
+									time: {$all: [re.compile(value1)]},
+								},
+								{
+									map: { $all: [{ "$elemMatch" : { time:{$all :[re.complie(value1)]} } }                                  ] }
+								}
+
+							]
+					},
+					{
+						$or:
+							[
+								{
+									{time: {$all: [re.compile(value2)]}},
+								},
+								{
+									map: { $all: [{ "$elemMatch" : { time:{$all :[re.complie(value2)]} } }                                  ] }
+								}
+
+							]
+					},
+					{
+						$or:
+							[
+								{
+									{works}: {$all: [re.compile(value1)]}},
+								},
+								{
+									map: { $all: [{ "$elemMatch" : { works:{$all :[re.complie(value1)]} } }                                  ] }
+								}
+
+							]
+					},
+					{
+						$or:
+							[
+								{
+									{works: {$all: [re.compile(value2)]}},
+								},
+								{
+									map: { $all: [{ "$elemMatch" : { works:{$all :[re.complie(value2)]} } }                                  ] }
+								}
+							]
+					}
+			]
+
+		}
+	]
+})
+
+
+trường hợp inform: Lưu thêm object chỗ fill inform slot và trả về object, lưu vào container
+trường hợp matchfound: state tracker lấy current inform ra để lúc match found lấy ra object thích hợp
+
+
+
+
+
+NOTE:
+INFORM 
+	chỉnh count slot value đang count cho các key chung (chưa count cho các key con)
+	chỉnh fill inform slot đang fill theo key chung có count lớn nhất (chưa count cho key con)
+	dbquery đã chỉnh
+	count db result for slot k cần chỉnh (do đã count theo key inform)
+
+
+
+Cấu trúc current_inform mới:
+current_inform = {"name_activity":[valueChung1,valueChung2],"works":[[valueChung1,valueChung2],[[valueRieng1,valueRieng2].[valueRieng1,valueRieng2]]]}
+
+
+list_match_obj = [{"works":[valueRieng1,valueRieng2],"address":[valueRieng1,valueRieng2],"name_place":[valueRieng1,valueRieng2],"time":[valueRieng1,valueRieng2]},{"works":[valueRieng1,valueRieng2],"address":"","name_place":"","time":""}]

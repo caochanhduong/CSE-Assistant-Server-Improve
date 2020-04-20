@@ -1,0 +1,76 @@
+testcase: ban tổ chức của hoạt động ngày huấn luện tâm trí tín ở 305 b1 là ai 
+305 b1 không có trong dictionary của name_place nên không bắt được
+=> xác định các name entity mà dùng để loại data khỏi database, các name entity cần bắt regex trước r mới bắt matching
+
+test 2:
+cho mình hỏi đối tượng tham gia của hoạt động an toàn thực phẩm và an ninh lương thực
+
++ fix lỗi dấu sao (done)
++ fix lỗi assignment (done)
++ fix tên ra trước (done)
++ thêm done thì response luôn k đẩy vô agent (new feature)
++ fix bắt sai intent
++ fix bắt sai entity
++ thêm detect câu confirm và trả về thông tin confirm: detect intent có trong entity bắt dc r 
+lấy nó ra trả về riêng entity đó (done)
++ bị sai logic chỗ bắt type_activity => thử chỉnh bắt name trc rồi comment type activity
++ trường hợp "ban chỉ huy"
++ hỗ trợ trong holder (trung tâm hỗ trợ) overlap với work (hỗ trợ xxx), overlap với cả reward, type
++ tân sinh viên bị overlap với tên hoạt động (overlap giữa name với joiner) => dùng indicator (có được đi,
+có được tham dự, có được tham gia, được tham dự, được tham gia, được đi)
++ 'tham dự' thành reward 
++ xóa hết tất cả đại loại như phải không bạn
+
+tại nhà tập thể thao của nhà trường:name_place nhưng lại có indicator "của" => không dùng indicatior để 
+phân biệt holder với name_place được
+
+ban tổ chức của the academia and industry networking 2018 là trường đại học giao thông vận tải tp . hcm phải không bạn
+bắt nhầm đại học giao thông vận tải là tên
+
+
+
+
+
+###############new
+Problem 1: các câu hỏi intent không phải confirm thuộc intent dài (reward,vvv) thì do có bắt entity dài nên 
+dẫn đến sai:
+exp 1:
+    cho mình hỏi lợi ích khi tham gia an toàn thực phẩm và an ninh lương thực của trung tâm phát triển khoa học và công nghệ trẻ nha bạn
+
+    ({'intent': 'request', 'inform_slots': {'name_activity': ['an toàn thực phẩm và an ninh lương thực']}, 'request_slots': {'reward': 'UNK'}}, {'reward': ['khoa học và công nghệ', 'của trung tâm', 'phát triển']})
+
+Problem 2: cụm thời gian bắt luôn "vào ngày xx" => lúc query có thể fail => giải quyết bằng xóa chữ "vào ngày" và các từ tương tự trong câu input (done)
+cho mình hỏi thời gian của hoạt động an toàn thực phẩm và an ninh lương thực của trung tâm phát triển khoa học và công nghệ trẻ ở hội trường c trường đh cntp là diễn ra vào ngày 12/12/2019 phải không
+({'intent': 'request', 'inform_slots': {'name_activity': ['an toàn thực phẩm và an ninh lương thực'],
+ 'name_place': ['hội trường c trường đh cntp'], 
+ 'holder': ['trung tâm phát triển khoa học và công nghệ trẻ']}, 
+ 'request_slots': {'time': 'UNK'}}, {'time': ['vào ngày 12/12/2019']})
+
+Problem 3: tên holder,joiner,name_place có thể bị overlap với tên hoạt động nên có thể bị bắt là tên hoạt động => dùng ngưỡng để lấy tên hoạt động, còn lại holder,nameplace thì dùng indicator, tên hoạt động thì với joiner dùng indicator (có hoạt động tên là "tân sinh viên") (done) 
+ví dụ:
+cho mình hỏi ban tổ chức của buổi hội nghị an toàn thực phẩm và an ninh lương thực là trung tâm phát triển khoa học và công nghệ trẻ và trường đh cntp TP.HCM phải không bạn
+({'intent': 'request', 
+'inform_slots': {'name_activity': ['an toàn thực phẩm và an ninh lương thực', 'tp . hcm'], 
+'type_activity': ['buổi hội nghị']}, 'request_slots': {'holder': 'UNK'}}, {'holder': ['trung tâm phát triển khoa học và công nghệ trẻ và trường đh cntp']})
+
+Problem 4: tiền xử lý câu intent làm entity bắt được của câu người dùng bị biến đổi nếu có dấu câu, có thể ảnh hưởng tới kết quả matching trong db => chỉnh lại code xử lí db query hoặc chỉnh luôn db
+ví dụ: TP.HCM => tp . hcm => không khớp TP.HCM trong db (done)
+
+Problem 5: bắt entity joiner không ổn (trong các câu confirm cho joiner) do có nhiều từ dính theo, gây nhầm lẫn các tag khác (holder, name_activity,name_place,.vvv)
+ví dụ: cho mình hỏi đối tượng tham gia của hoạt động an toàn thực phẩm và an ninh lương thực là sinh viên bách khoa phải không bạn
+({'intent': 'request', 'inform_slots': {'name_activity': ['an toàn thực phẩm và an ninh lương thực'], 'holder': ['bách khoa']}, 'request_slots': {'joiner': 'UNK'}}, {'joiner': ['là sinh viên']})
+
+Problem 6: pattern reward chưa ổn => thêm vào pattern (done)
+
+Problem 7: các indicator dùng để phân biệt holder, name_place lại nằm trong cả name_place,holder => chỉnh lại code (done)
+
+Problem 8: entity địa chỉ các tên phường bắt chưa ổn => thêm tất cả tên phường, quận của tphcm và tên 64 tỉnh thành vào dictionary (done)
+
+Problem 9: "hỗ trợ" bị overlap 4 entity => tạm thời bỏ từ "hỗ trợ" trong loại hoạt động
+THIET KE API ADMIN:
+update by id (ez)
+insert (ez)
+select all limit (ez)
+delete by id (ez)
+select by constraint (chuc nang search)
+select theo thoi gian dia diem cua map (hard)

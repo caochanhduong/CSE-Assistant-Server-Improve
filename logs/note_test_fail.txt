@@ -1,0 +1,45 @@
+3:kí tự lạ
+4: kí tự lạ
+6: nhầm time là chương trình
+7: reward sai
+8: sai work
+9: sai name
+10: sai name
+11: sai intent thành joiner (reward), sai name
+12: sai name
+13: sai intent thàn contact (joiner), sai name
+14: sai name 
+15: sai name
+16: sai name, nhầm name thành loại, loại thành name, nhầm reward 
+17: sai hết
+18: sai intent thànhh name thành loại
+20: nhầm intent thành joiner, nhầm name thành loại, thiếu work
+23: thiếu name place
+24: sai intent thành works (reward), thiếu reward 
+26: nhầm nameplace thành time, nameplace thành holder
+27: nhầm name thành time, type thành name 
+28: nhầm name thành time
+29: nhầm name và type thành time
+31: nhầm nameplace thành joiner
+32: nhầm name thành time 
+33: nhầm intent thành contact (holder)
+36: nhầm intent thành contact (joiner)
+40: nhầm nameplace thành reward, có dấu sao 
+42: nhầm intent thành activity (joiner)
+43: nhầm intent thành works (reward), bắt reward thành works 
+45: thiếu name 
+46: thiếu name, bắt nhầm reward 
+47: nhầm nameplace thành name, thiếu name
+48: có dấu sao, joiner thành holder, thiếu name, sai pattern time 
+49: thiếu holder, sai name  
+50: sai name, thiếu holder, sai reward 
+51: nhầm intent thành contact (joiner), thiếu holder, sai name 
+52: nhầm name thành time, nhầm nameplace thành name
+53: nhầm name và namepalce thành time, bắt thêm joiner, holder thành joiner
+54: nhầm name thành time, thiếu nameplace, thiếu contact, nhầm intent thành register (contact)
+58: nhầm joiner thành name, nhầm intent thành works (joiner)
+59: thiếu name, sai name thành time, thiếu register 
+60: nhầm intent thành works (reward), sai works, thiếu nameplace
+
+
+bắt tên trước time 
